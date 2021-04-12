@@ -14,3 +14,8 @@ docker-compose exec app go run main.go
 or
 
 docker run golang_app go run app/main.go
+
+# デバッカー
+`.vscode/launch.json`で
+`${workspaceFolder}/app`って書いて、
+appディレクトリ配下のファイルを読むようにしてる
