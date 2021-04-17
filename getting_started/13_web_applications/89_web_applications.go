@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -37,6 +38,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
 }
 
 func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
+	fmt.Println(title)
 	p, err := loadPage(title)
 	if err != nil {
 		http.Redirect(w, r, "/edit/"+title, http.StatusFound)
@@ -70,9 +72,11 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 	return func(w http.ResponseWriter, r *http.Request) {
 		m := validPath.FindStringSubmatch(r.URL.Path)
 		if m == nil {
+			fmt.Println(w, r)
 			http.NotFound(w, r)
 			return
 		}
+		fmt.Println(m[2], "m[2]")
 		fn(w, r, m[2])
 	}
 }
@@ -83,4 +87,3 @@ func main() {
 	http.HandleFunc("/save/", makeHandler(saveHandler))
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
-
